@@ -9,7 +9,7 @@ Use `./euler` script to run and create solutions.
 ```
 usage: euler [-h] [-l {cpp,go,js,py}] {run,new} problem
 
-Eulerproject solutions manager
+Projecteuler solutions manager
 
 positional arguments:
   {run,new}
