@@ -37,7 +37,7 @@ def run(problem_id, language):
     print("time {:.3f} ms".format((end-start)*1000))
 
 def main():
-    parser = argparse.ArgumentParser(description="Eulerproject solutions manager")
+    parser = argparse.ArgumentParser(description="Project euler solutions manager")
     parser.add_argument("command", type=str, choices=[CMD_RUN, CMD_NEW])
     parser.add_argument("problem", help="Problem number", type=int)
     parser.add_argument("-l", "--language", help="Programming language of solution code",
