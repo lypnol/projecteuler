@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+# stdlib
+import os.path
+import argparse
+# project
+import time
+from tools.runner import Runner
+from tools.templates import TEMPLATES
+from tools.utils import is_tool, tool_for_lang
+
+
+CMD_RUN = "run"
+CMD_NEW = "new"
+FILE_FMT = "solutions/{:03d}.{}"
+
+ALLOWED_LANGUAGES = ['cpp', 'go', 'js', 'py']
+SUPPORTED_LANGUAGES = [l for l in ALLOWED_LANGUAGES if is_tool(tool_for_lang(l))]
+
+def new(problem_id, language):
+    filepath = FILE_FMT.format(problem_id, language)
+    if os.path.exists(filepath):
+        raise Exception("{} not empty".format(filepath))
+    with open(filepath, "w") as file:
+        file.write(TEMPLATES[language])
+    print("created", filepath)
+
+def run(problem_id, language):
+    filepath = FILE_FMT.format(problem_id, language)
+    if not os.path.exists(filepath):
+        raise Exception("{} does not exist".format(filepath))
+    runner = Runner(language, filepath)
+    start = time.time()
+    print(runner.run())
+    end = time.time()
+    print("time {:.3f} ms".format((end-start)*1000))
+
+def main():
+    parser = argparse.ArgumentParser(description="Eulerproject solutions manager")
+    parser.add_argument("command", type=str, choices=[CMD_RUN, CMD_NEW])
+    parser.add_argument("problem", help="Problem number", type=int)
+    parser.add_argument("-l", "--language", help="Programming language of solution code",
+                        type=str, choices=SUPPORTED_LANGUAGES, default="cpp")
+    args = parser.parse_args()
+    if args.command == CMD_NEW:
+        new(args.problem, args.language)
+    elif args.command == CMD_RUN:
+        run(args.problem, args.language)
+
+if __name__ == "__main__":
+    main()
