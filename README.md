@@ -1,6 +1,6 @@
 # Project euler solutions
 
-This are some of my proposed solutions for [eulerproject](https://projecteuler.net) problems.
+This are some of my proposed solutions for [projecteuler](https://projecteuler.net) problems.
 
 ## How to use
 
