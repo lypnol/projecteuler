@@ -10,15 +10,13 @@ bool is_prime(long n) {
 }
 
 long solve() {
-    long N = 600851475143;
-    long d, f;
-    for (d = 2; d < N / 2; d++) {
-        if (N % d == 0) {
-            f = N / d;
-            if (is_prime(f)) return f;
-        }
+    long n = 1;
+    int found = 0;
+    while (found < 10001) {
+        n++;
+        if (is_prime(n)) found++;
     }
-    return 0;
+    return n;
 }
 
 int main() {
