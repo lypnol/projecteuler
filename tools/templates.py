@@ -19,7 +19,7 @@ int main() {
 """,
     'go': """package main
 
-import fmt
+import "fmt"
 
 func solve() int {
     // solution code

@@ -26,13 +26,18 @@ def new(problem_id, language):
         file.write(TEMPLATES[language])
     print("created", filepath)
 
-def run(problem_id, language):
-    filepath = FILE_FMT.format(problem_id, language)
-    if not os.path.exists(filepath):
+def run(problem_id):
+    filepath, language = None, None
+    for language in ALLOWED_LANGUAGES:
+        fp = FILE_FMT.format(problem_id, language)
+        if os.path.exists(fp):
+            filepath = fp
+            break
+    if filepath is None:
         raise Exception("{} does not exist".format(filepath))
     runner = Runner(language, filepath)
     start = time.time()
-    print(runner.run())
+    runner.run()
     end = time.time()
     print("time {:.3f} ms".format((end-start)*1000))
 
@@ -46,7 +51,7 @@ def main():
     if args.command == CMD_NEW:
         new(args.problem, args.language)
     elif args.command == CMD_RUN:
-        run(args.problem, args.language)
+        run(args.problem)
 
 if __name__ == "__main__":
     main()

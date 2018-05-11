@@ -1,8 +1,15 @@
+
+**Current problem** [21](https://projecteuler.net/problem=21)
+
 # Project euler solutions
 
-This are some of my proposed solutions for [projecteuler](https://projecteuler.net) problems.
+These are some proposed solutions for [projecteuler](https://projecteuler.net) problems.
 
-## How to use
+## How to contribute
+
+We select a problem to solve in two weeks. At the end of this period we choose the best solution from the pull requests.   
+
+## Solutions manager
 
 Use `./euler` script to run and create solutions.
 
