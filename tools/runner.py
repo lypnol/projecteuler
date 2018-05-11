@@ -56,7 +56,7 @@ class Runner:
                 stdout=sys.stdout,
                 stderr=sys.stderr,
                 close_fds=True)
-            p.wait()
+            p.wait(timeout=60)
         except OSError as e:
             if e.errno == os.errno.ENOENT:
             	# executable not found
