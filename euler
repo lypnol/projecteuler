@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # stdlib
+import os
 import os.path
 import argparse
 # project
@@ -13,12 +14,26 @@ from tools.utils import is_tool, tool_for_lang
 
 CMD_RUN = "run"
 CMD_NEW = "new"
-FILE_FMT = "solutions/{:03d}.{}"
+SOLUTIONS_DIR = "solutions"
+FILE_FMT = SOLUTIONS_DIR+"/{:03d}.{}"
 
 ALLOWED_LANGUAGES = ['cpp', 'go', 'js', 'py']
 SUPPORTED_LANGUAGES = [l for l in ALLOWED_LANGUAGES if is_tool(tool_for_lang(l))]
 
-def new(problem_id, language):
+LAST_PROBLEM_ID = -1
+def _get_last_problem_id():
+    global LAST_PROBLEM_ID
+    if LAST_PROBLEM_ID != -1:
+        return LAST_PROBLEM_ID
+    files = sorted(os.listdir(SOLUTIONS_DIR))
+    if files:
+        LAST_PROBLEM_ID = int(files[-1].split('.')[0])
+    else:
+        LAST_PROBLEM_ID = 0
+    return LAST_PROBLEM_ID
+
+def new(problem_id=0, language=""):
+    problem_id = problem_id if problem_id > 0 else (_get_last_problem_id()+1)
     filepath = FILE_FMT.format(problem_id, language)
     if os.path.exists(filepath):
         raise Exception("{} not empty".format(filepath))
@@ -26,7 +41,8 @@ def new(problem_id, language):
         file.write(TEMPLATES[language])
     print("created", filepath)
 
-def run(problem_id):
+def run(problem_id=0):
+    problem_id = problem_id if problem_id > 0 else _get_last_problem_id()
     filepath, language = None, None
     for language in ALLOWED_LANGUAGES:
         fp = FILE_FMT.format(problem_id, language)
@@ -36,6 +52,7 @@ def run(problem_id):
     if filepath is None:
         raise Exception("{} does not exist".format(filepath))
     runner = Runner(language, filepath)
+    print("runing {}".format(filepath))
     start = time.time()
     runner.run()
     end = time.time()
@@ -44,7 +61,7 @@ def run(problem_id):
 def main():
     parser = argparse.ArgumentParser(description="Project euler solutions manager")
     parser.add_argument("command", type=str, choices=[CMD_RUN, CMD_NEW])
-    parser.add_argument("problem", help="Problem number", type=int)
+    parser.add_argument("-p", "--problem", help="Problem id", type=int, default=0)
     parser.add_argument("-l", "--language", help="Programming language of solution code",
                         type=str, choices=SUPPORTED_LANGUAGES, default="cpp")
     args = parser.parse_args()
